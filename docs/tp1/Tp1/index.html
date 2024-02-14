@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Tp1 (tp1.Tp1)</title><meta charset="utf-8"/><link rel="stylesheet" href="../../odoc.support/odoc.css"/><meta name="generator" content="odoc 2.4.1"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><script src="../../odoc.support/highlight.pack.js"></script><script>hljs.initHighlightingOnLoad();</script></head><body class="odoc"><nav class="odoc-nav"><a href="../index.html">Up</a> – <a href="../index.html">tp1</a> &#x00BB; Tp1</nav><header class="odoc-preamble"><h1>Module <code><span>Tp1</span></code></h1><p>TP1 Hiver 2024 - Langages de programmation (IFT-3000)</p><ul><li>Gestion de cours et de programmes - Dépendances de cours</li></ul></header><nav class="odoc-toc"><ul><li><a href="#structures-de-données">Structures de données</a></li><li><a href="#interface-des-fonctions-à-implanter">Interface des fonctions à implanter</a></li></ul></nav><div class="odoc-content"><h2 id="structures-de-données"><a href="#structures-de-données" class="anchor"></a>Structures de données</h2><div class="odoc-spec"><div class="spec type anchored" id="type-type_cours"><a href="#type-type_cours" class="anchor"></a><code><span><span class="keyword">type</span> type_cours</span><span> = </span></code><ol><li id="type-type_cours.OB" class="def variant constructor anchored"><a href="#type-type_cours.OB" class="anchor"></a><code><span>| </span><span><span class="constructor">OB</span></span></code><div class="def-doc"><span class="comment-delim">(*</span><p>Cours obligatoires dans le programme</p><span class="comment-delim">*)</span></div></li><li id="type-type_cours.OP" class="def variant constructor anchored"><a href="#type-type_cours.OP" class="anchor"></a><code><span>| </span><span><span class="constructor">OP</span></span></code><div class="def-doc"><span class="comment-delim">(*</span><p>Cours optionnels dans le programme</p><span class="comment-delim">*)</span></div></li><li id="type-type_cours.Conc" class="def variant constructor anchored"><a href="#type-type_cours.Conc" class="anchor"></a><code><span>| </span><span><span class="constructor">Conc</span></span></code><div class="def-doc"><span class="comment-delim">(*</span><p>Cours mentionnés dans les concentrations</p><span class="comment-delim">*)</span></div></li></ol></div></div><h2 id="interface-des-fonctions-à-implanter"><a href="#interface-des-fonctions-à-implanter" class="anchor"></a>Interface des fonctions à implanter</h2><div class="odoc-spec"><div class="spec value anchored" id="val-est_prerequis"><a href="#val-est_prerequis" class="anchor"></a><code><span><span class="keyword">val</span> est_prerequis : 
+  <span><span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-cours">GcpLib.Gcp.cours</a> list</span> <span class="arrow">&#45;&gt;</span></span>
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> <span class="arrow">&#45;&gt;</span></span>
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> <span class="arrow">&#45;&gt;</span></span>
+  int</span></code></div><div class="spec-doc"><p><code>est_prerequis lc nc1 nc2</code> retourne 1 si <code>nc2</code> est prérequis à <code>nc1</code>; -1 si c'est <code>nc1</code> qui est prérequis à <code>nc2</code>; 0 sinon.</p><p><b>Soulève exception</b> <em>Failure</em> si un des 2 cours <code>nc1</code> ou <code>nc2</code> n'est pas défini dans <code>lc</code> (l'exception pourrait avoir été soulevée par une autre fonction appelée dans le corps de <code>est_prerequis</code>).</p><p>Exemples:</p><pre class="language-ocaml"><code># est_prerequis bcours &quot;IFT-2008&quot; &quot;IFT-3000&quot;;;
+- : int = -1</code></pre><pre class="language-ocaml"><code># est_prerequis bcours &quot;IFT-3000&quot; &quot;IFT-2008&quot;;;
+- : int = 1</code></pre><pre class="language-ocaml"><code># est_prerequis bcours &quot;IFT-3000&quot; &quot;IFT-3000&quot;;;
+- : int = 0</code></pre><pre class="language-ocaml"><code># est_prerequis bcours &quot;IFT-3000&quot; &quot;IFT-1004&quot;;;
+- : int = 0</code></pre><pre class="language-ocaml"><code># est_prerequis bcours &quot;GIF-1001&quot; &quot;IFT-1004&quot;;;
+- : int = 1</code></pre><pre class="language-ocaml"><code># est_prerequis bcours &quot;IFT-2008&quot; &quot;a&quot;;;
+Exception: Failure &quot;Cours &lt;a&gt; inexistant!&quot;.</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-simp_pre"><a href="#val-simp_pre" class="anchor"></a><code><span><span class="keyword">val</span> simp_pre : <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-prealables">GcpLib.Gcp.prealables</a> <span class="arrow">&#45;&gt;</span></span> <a href="../../gcpLib/GcpLib/Gcp/index.html#type-prealables">GcpLib.Gcp.prealables</a></span></code></div><div class="spec-doc"><p><code>simpl_pre</code> simplifie les disjonctions (OU) et les conjections (ET) de préalables (<code>pre</code>). Plus précisément, elle élimine les redondances de préalables et les imbrications de conjonctions ou de disjonctions; aussi, si une conjonction ou une disjonction se limite à un seul préalable, elle sera simplifiée en ce préalable; de même, si une conjonction ou une disjonction se retrouve avec une liste vide de préalable, elle est simplifiée en «Aucun».</p><p>Exemples:</p><pre class="language-ocaml"><code># simp_pre (OU [CP &quot;a&quot;; OU [CP &quot;b&quot;; CP &quot;a&quot;]]);;
+- : prealables = OU [CP &quot;a&quot;; CP &quot;b&quot;]</code></pre><pre class="language-ocaml"><code># simp_pre (OU [CP &quot;a&quot;;  CP &quot;a&quot;]);;
+- : prealables = CP &quot;a&quot;</code></pre><pre class="language-ocaml"><code># simp_pre (OU [CP &quot;a&quot;;  CCP &quot;a&quot;]);;
+- : prealables = OU [CP &quot;a&quot;; CCP &quot;a&quot;]</code></pre><pre class="language-ocaml"><code># simp_pre (ET [CRE 12; CRE 24; CRE 12]);;
+- : prealables = ET [CRE 12; CRE 24]</code></pre><pre class="language-ocaml"><code># simp_pre (OU [Aucun; OU [Aucun];  Aucun]);;
+- : prealables = Aucun</code></pre><pre class="language-ocaml"><code># simp_pre (ET [CP &quot;a&quot;; OU [CP &quot;b&quot;; ET [CP &quot;a&quot;; CP &quot;c&quot;]; CP &quot;b&quot;; Aucun]; 
+                 ET [Aucun; CP &quot;a&quot;; CP &quot;d&quot;]]);;
+- : prealables = ET [CP &quot;a&quot;; OU [CP &quot;b&quot;; ET [CP &quot;a&quot;; CP &quot;c&quot;]]; CP &quot;d&quot;]</code></pre><pre class="language-ocaml"><code># simp_pre (ET [CP &quot;a&quot;; OU [CP &quot;b&quot;]]);;
+- : prealables = ET [CP &quot;a&quot;; CP &quot;b&quot;]</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-seuls_cours_pgm_dans_pre"><a href="#val-seuls_cours_pgm_dans_pre" class="anchor"></a><code><span><span class="keyword">val</span> seuls_cours_pgm_dans_pre : 
+  <span><span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> list</span> <span class="arrow">&#45;&gt;</span></span>
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-prealables">GcpLib.Gcp.prealables</a> <span class="arrow">&#45;&gt;</span></span>
+  <a href="../../gcpLib/GcpLib/Gcp/index.html#type-prealables">GcpLib.Gcp.prealables</a></span></code></div><div class="spec-doc"><p><code>seuls_cours_pgm_dans_pre lncp pre</code> retire d'un préalable <code>pre</code> tous les cours qui ne font partie de <code>lncp</code> (liste de numéros de cours d'un programme); évidemment, une fois les cours retirés, il faut retourner un nouveau préalable résultant qui aura été préalablement simplifié (voir <a href="#val-simp_pre"><code>simp_pre</code></a>).</p><p>Exemples:</p><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [] Aucun;;
+- : prealables = Aucun</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [] (CRE 12);;
+- : prealables = CRE 12</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [] (CP &quot;a&quot;);;
+- : prealables = Aucun</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;] (CCP &quot;b&quot;);;
+- : prealables = CCP &quot;b&quot;</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;] (CP &quot;e&quot;);;
+- : prealables = Aucun</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [&quot;a&quot;; &quot;b&quot;] (OU [CP &quot;b&quot;; CRE 12; CP &quot;e&quot;; CRE 12]);;
+- : prealables = OU [CP &quot;b&quot;; CRE 12]</code></pre><pre class="language-ocaml"><code># seuls_cours_pgm_dans_pre [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;] 
+      (ET [CCP &quot;b&quot;; OU [CCP &quot;b&quot;; CP &quot;e&quot;]; OU [CP &quot;e&quot;; CP &quot;f&quot;]]);;
+- : prealables = CCP &quot;b&quot;</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-cours_pgm_par_type"><a href="#val-cours_pgm_par_type" class="anchor"></a><code><span><span class="keyword">val</span> cours_pgm_par_type : 
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-programme">GcpLib.Gcp.programme</a> <span class="arrow">&#45;&gt;</span></span>
+  <span><a href="#type-type_cours">type_cours</a> <span class="arrow">&#45;&gt;</span></span>
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> list</span></span></code></div><div class="spec-doc"><p><code>cours_pgm_par_type pgm ch</code> retourne une liste de cours du programme <code>pgm</code>. Le paramètre <code>ch</code> permet de préciser davantage les cours ciblés: obligatoires, optionnels ou ceux présents dans les concentrations.</p><p>Exemples:</p><pre class="language-ocaml"><code># cours_pgm_par_type b_iig OB;;
+- : num_cours list =
+    [&quot;GIF-1001&quot;; &quot;IFT-1004&quot;; &quot;MNG-1000&quot;; &quot;MQT-1102&quot;; &quot;SIO-2103&quot;; &quot;CTB-1000&quot;;
+     &quot;SIO-2100&quot;; &quot;SIO-2105&quot;; &quot;GSO-1000&quot;; &quot;SIO-2104&quot;; &quot;SIO-3100&quot;; &quot;GSF-1000&quot;;
+     &quot;SIO-2107&quot;; &quot;GLO-4000&quot;; &quot;MRK-1000&quot;; &quot;GLO-2003&quot;; &quot;GLO-4002&quot;; &quot;SIO-2102&quot;;
+     &quot;SIO-3110&quot;; &quot;IFT-2580&quot;; &quot;GIF-1003&quot;; &quot;IFT-1006&quot;; &quot;GLO-2001&quot;; &quot;IFT-2001&quot;;
+     &quot;GLO-2000&quot;; &quot;IFT-2006&quot;; &quot;GLO-2004&quot;; &quot;IFT-2007&quot;; &quot;GLO-2100&quot;; &quot;IFT-2008&quot;;
+     &quot;GLO-2005&quot;; &quot;IFT-2004&quot;; &quot;GIN-3060&quot;; &quot;SIO-2110&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type b_iig OP;;
+- : num_cours list =
+    [&quot;GIF-3101&quot;; &quot;GLO-3100&quot;; &quot;GLO-3102&quot;; &quot;GLO-3202&quot;; &quot;GLO-4003&quot;; &quot;GLO-4008&quot;;
+     &quot;GLO-4035&quot;; &quot;IFT-2002&quot;; &quot;IFT-2003&quot;; &quot;IFT-2101&quot;; &quot;IFT-2102&quot;; &quot;IFT-3000&quot;;
+     &quot;IFT-3001&quot;; &quot;IFT-3002&quot;; &quot;IFT-3100&quot;; &quot;IFT-3101&quot;; &quot;IFT-3201&quot;; &quot;IFT-4100&quot;;
+     &quot;MAT-1919&quot;; &quot;ANL-2020&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type b_iig Conc;;
+- : num_cours list =
+    [&quot;GLO-3100&quot;; &quot;GLO-3202&quot;; &quot;IFT-2102&quot;; &quot;IFT-3002&quot;; &quot;IFT-3201&quot;; &quot;IFT-4100&quot;;
+     &quot;ANL-2020&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type mp_base OB;;
+- : num_cours list =
+    [&quot;GIF-1001&quot;; &quot;IFT-1004&quot;; &quot;GIF-1003&quot;; &quot;IFT-1006&quot;; &quot;GLO-2100&quot;; &quot;IFT-2008&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type mp_base OP;;
+- : num_cours list =
+    [&quot;GLO-2004&quot;; &quot;IFT-1003&quot;; &quot;IFT-1700&quot;; &quot;IFT-2001&quot;; &quot;IFT-2004&quot;; &quot;IFT-2006&quot;;
+    &quot;IFT-2007&quot;; &quot;IFT-2103&quot;; &quot;IFT-3000&quot;; &quot;IFT-3002&quot;; &quot;IFT-3100&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type mp_base Conc;;
+- : num_cours list = []</code></pre><pre class="language-ocaml"><code># cours_pgm_par_type mp_jv OP;;
+- : num_cours list = []</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-cours_pgm"><a href="#val-cours_pgm" class="anchor"></a><code><span><span class="keyword">val</span> cours_pgm : <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-programme">GcpLib.Gcp.programme</a> <span class="arrow">&#45;&gt;</span></span> <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> list</span></span></code></div><div class="spec-doc"><p><code>cours_pgm pgm</code> retourne la liste de tous les cours du programme <code>pgm</code>. Cette liste ne doit comprendre qu'une occurrence de chaque cours.</p><p>Exemples:</p><pre class="language-ocaml"><code># cours_pgm mp_tdm;;
+- : num_cours list =
+    [&quot;IFT-1004&quot;; &quot;GLO-4035&quot;; &quot;GLO-4027&quot;; &quot;GIF-1003&quot;; &quot;IFT-1006&quot;; &quot;GLO-2005&quot;;
+     &quot;IFT-2004&quot;; &quot;GLO-2100&quot;; &quot;IFT-2008&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm b_ift;;
+- : num_cours list =
+    [&quot;GIF-1001&quot;; &quot;IFT-1004&quot;; &quot;IFT-1111&quot;; &quot;MAT-1200&quot;; &quot;MAT-1919&quot;; &quot;IFT-1000&quot;;
+     &quot;IFT-1003&quot;; &quot;STT-1000&quot;; &quot;IFT-2002&quot;; &quot;IFT-3000&quot;; &quot;IFT-3001&quot;; &quot;IFT-3101&quot;;
+     &quot;IFT-2580&quot;; &quot;IFT-3580&quot;; &quot;GIF-1003&quot;; &quot;IFT-1006&quot;; &quot;GLO-2000&quot;; &quot;IFT-2006&quot;;
+     &quot;GLO-2001&quot;; &quot;IFT-2001&quot;; &quot;GLO-2100&quot;; &quot;IFT-2008&quot;; &quot;GLO-2004&quot;; &quot;IFT-2007&quot;;
+     &quot;IFT-2004&quot;; &quot;GLO-2005&quot;; &quot;ANL-2020&quot;; &quot;ANL-3020&quot;; &quot;BIF-4007&quot;; &quot;GIF-3101&quot;;
+     &quot;GIF-4100&quot;; &quot;GIF-4101&quot;; &quot;GIF-4104&quot;; &quot;GIF-4105&quot;; &quot;GLO-2003&quot;; &quot;GLO-3100&quot;;
+     &quot;GLO-3101&quot;; &quot;GLO-3102&quot;; &quot;GLO-3112&quot;; &quot;GLO-3202&quot;; &quot;GLO-4000&quot;; &quot;GLO-4001&quot;;
+     &quot;GLO-4003&quot;; &quot;GLO-4008&quot;; &quot;GLO-4009&quot;; &quot;GLO-4010&quot;; &quot;GLO-4027&quot;; &quot;GLO-4030&quot;;
+     &quot;GLO-4035&quot;; &quot;IFT-2101&quot;; &quot;IFT-2102&quot;; &quot;IFT-2103&quot;; &quot;IFT-3002&quot;; &quot;IFT-3100&quot;;
+     &quot;IFT-3113&quot;; &quot;IFT-4001&quot;; &quot;IFT-4003&quot;; &quot;IFT-4021&quot;; &quot;IFT-4022&quot;; &quot;IFT-4029&quot;;
+     &quot;IFT-4030&quot;; &quot;IFT-4100&quot;; &quot;IFT-4201&quot;; &quot;SIO-2100&quot;; &quot;SIO-2102&quot;; &quot;SIO-2104&quot;;
+     &quot;SIO-2105&quot;; &quot;SIO-2107&quot;; &quot;GLO-3004&quot;; &quot;GLO-4002&quot;; &quot;IFT-3201&quot;; &quot;IFT-2003&quot;;
+     &quot;IFT-4102&quot;; &quot;BCM-1001&quot;; &quot;BCM-1003&quot;; &quot;BCM-1005&quot;; &quot;BIF-1000&quot;; &quot;BIF-1001&quot;;
+     &quot;PHY-1903&quot;; &quot;STT-2200&quot;]</code></pre><pre class="language-ocaml"><code># cours_pgm c_ift;;
+- : num_cours list =
+    [&quot;GIF-1001&quot;; &quot;IFT-1004&quot;; &quot;GIF-1003&quot;; &quot;IFT-1006&quot;; &quot;GLO-2100&quot;; &quot;IFT-2008&quot;;
+     &quot;GIF-4104&quot;; &quot;GLO-2003&quot;; &quot;GLO-3101&quot;; &quot;GLO-3102&quot;; &quot;GLO-3202&quot;; &quot;GLO-4000&quot;;
+     &quot;GLO-4002&quot;; &quot;GLO-4003&quot;; &quot;GLO-4008&quot;; &quot;GLO-4009&quot;; &quot;GLO-4027&quot;; &quot;GLO-4035&quot;;
+     &quot;IFT-1003&quot;; &quot;IFT-1700&quot;; &quot;IFT-2101&quot;; &quot;IFT-2102&quot;; &quot;IFT-2103&quot;; &quot;IFT-3000&quot;;
+     &quot;IFT-3002&quot;; &quot;IFT-3100&quot;; &quot;IFT-3201&quot;; &quot;IFT-4029&quot;; &quot;SIO-2102&quot;; &quot;SIO-2104&quot;;
+     &quot;GLO-3112&quot;; &quot;IFT-3113&quot;; &quot;GLO-2004&quot;; &quot;IFT-2007&quot;; &quot;GLO-2000&quot;; &quot;IFT-2006&quot;;
+     &quot;GLO-2001&quot;; &quot;IFT-2001&quot;; &quot;GLO-2005&quot;; &quot;IFT-2004&quot;]</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-cours_contrib_dans_pgm"><a href="#val-cours_contrib_dans_pgm" class="anchor"></a><code><span><span class="keyword">val</span> cours_contrib_dans_pgm : 
+  <span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> <span class="arrow">&#45;&gt;</span></span>
+  <span><span><span>(string * <a href="../../gcpLib/GcpLib/Gcp/index.html#type-programme">GcpLib.Gcp.programme</a>)</span> list</span> <span class="arrow">&#45;&gt;</span></span>
+  <span><span>(string * <span><a href="#type-type_cours">type_cours</a> option</span>)</span> list</span></span></code></div><div class="spec-doc"><p><code>cours_contrib_dans_pgm nc lpgms</code> retourne une liste qui précise, pour chaque programme présent dans <code>lpgms</code>, si le cours <code>nc</code> y est obligatoire («Some OB»), optionnel («Some OP») ou non contributoire («None»).</p><p>Exemples:</p><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;IFT-3000&quot; l_pgms;;
+- : (string * type_cours option) list =
+    [(&quot;B-IFT&quot;, Some OB); (&quot;B-IIG&quot;, Some OP); (&quot;B-GLO&quot;, Some OP);
+     (&quot;C-IFT&quot;, Some OP); (&quot;MP-BASE&quot;, Some OP); (&quot;MP-GLO&quot;, None);
+     (&quot;MP-WEB&quot;, None); (&quot;MP-JV&quot;, None); (&quot;MP-TDM&quot;, None)]</code></pre><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;IFT-1004&quot; l_pgms;;
+- : (string * type_cours option) list =
+    [(&quot;B-IFT&quot;, Some OB); (&quot;B-IIG&quot;, Some OB); (&quot;B-GLO&quot;, None); (&quot;C-IFT&quot;, Some OB);
+     (&quot;MP-BASE&quot;, Some OB); (&quot;MP-GLO&quot;, Some OB); (&quot;MP-WEB&quot;, Some OB);
+     (&quot;MP-JV&quot;, Some OB); (&quot;MP-TDM&quot;, Some OB)]</code></pre><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;GLO-4010&quot; l_pgms;;
+- : (string * type_cours option) list =
+    [(&quot;B-IFT&quot;, Some OP); (&quot;B-IIG&quot;, None); (&quot;B-GLO&quot;, Some OP); (&quot;C-IFT&quot;, None);
+     (&quot;MP-BASE&quot;, None); (&quot;MP-GLO&quot;, None); (&quot;MP-WEB&quot;, None); (&quot;MP-JV&quot;, None);
+     (&quot;MP-TDM&quot;, None)]</code></pre><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;a&quot; l_pgms;;
+- : (string * type_cours option) list =
+    [(&quot;B-IFT&quot;, None); (&quot;B-IIG&quot;, None); (&quot;B-GLO&quot;, None); (&quot;C-IFT&quot;, None);
+     (&quot;MP-BASE&quot;, None); (&quot;MP-GLO&quot;, None); (&quot;MP-WEB&quot;, None); (&quot;MP-JV&quot;, None);
+     (&quot;MP-TDM&quot;, None)]</code></pre><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;IFT-1004&quot; [];;
+- : (string * type_cours option) list = []</code></pre><pre class="language-ocaml"><code># cours_contrib_dans_pgm &quot;IFT-1004&quot; [&quot;B-GLO&quot;,b_glo];;
+- : (string * type_cours option) list = [(&quot;B-GLO&quot;, None)]</code></pre></div></div><div class="odoc-spec"><div class="spec value anchored" id="val-regroupe_cours_equiv"><a href="#val-regroupe_cours_equiv" class="anchor"></a><code><span><span class="keyword">val</span> regroupe_cours_equiv : 
+  <span><span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-cours">GcpLib.Gcp.cours</a> list</span> <span class="arrow">&#45;&gt;</span></span>
+  <span><span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> list</span> <span class="arrow">&#45;&gt;</span></span>
+  <span><span><a href="../../gcpLib/GcpLib/Gcp/index.html#type-num_cours">GcpLib.Gcp.num_cours</a> list</span> list</span></span></code></div><div class="spec-doc"><p><code>regroupe_cours_equiv lc lnc</code> regroupe les cours équivalents présents dans la liste <code>lnc</code>; pour un cours présent dans cette liste, si il ne comprend de cours équivalents dans le reste de la liste, on retourne une liste singleton comprenant ce cours; autrement, on retourne une liste comprenant ce cours et tous les autres cours de la liste qui lui sont équivalents.</p><p>À noter que dans les listes contenues dans la liste résultante, lorsque la liste comprend plus d'un cours, il faut que les cours soient triés du plus petit vers le plus grand (utiliser simplement <a href="https://v2.ocaml.org/releases/5.1/api/Stdlib.html">Stdlib.compare</a>).</p><p><b>Soulève exception</b> <em>Failure</em> si un des cours présent dans <code>lnc</code> n'est pas défini dans <code>lc</code> (l'exception pourrait avoir été soulevée par une autre fonction appelée dans le corps de <code>regroupe_cours_equiv</code>).</p><p>Exemples:</p><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [];;
+- : num_cours list list = []</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;IFT-3000&quot;];;
+- : num_cours list list = [[&quot;IFT-3000&quot;]]</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;IFT-3000&quot;; &quot;IFT-1004&quot;];;
+- : num_cours list list = [[&quot;IFT-3000&quot;]; [&quot;IFT-1004&quot;]]</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;IFT-1004&quot;; &quot;IFT-3000&quot;; &quot;GLO-1901&quot;];;
+- : num_cours list list = [[&quot;GLO-1901&quot;; &quot;IFT-1004&quot;]; [&quot;IFT-3000&quot;]]</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;GLO-2100&quot;;&quot;IFT-1004&quot;;&quot;IFT-2008&quot;;&quot;GLO-1901&quot;];;
+- : num_cours list list = [[&quot;GLO-2100&quot;; &quot;IFT-2008&quot;]; [&quot;GLO-1901&quot;; &quot;IFT-1004&quot;]]</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;GLO-7003&quot;; &quot;GLO-1901&quot;; &quot;GLO-4010&quot;];;
+- : num_cours list list = [[&quot;GLO-7003&quot;]; [&quot;GLO-1901&quot;]; [&quot;GLO-4010&quot;]]</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;a&quot;];;
+Exception: Failure &quot;Cours &lt;a&gt; inexistant!&quot;.</code></pre><pre class="language-ocaml"><code># regroupe_cours_equiv bcours [&quot;IFT-3000&quot;;&quot;b&quot;];;
+Exception: Failure &quot;Cours &lt;b&gt; inexistant!&quot;.</code></pre></div></div></div></body></html>

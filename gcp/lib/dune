@@ -1,0 +1,4 @@
+(library
+ (name gcpLib)
+ (public_name gcpLib)
+ (modules gcp cours programmes))
