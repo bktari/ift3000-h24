@@ -20,8 +20,8 @@ type type_cours =
 
 val est_prerequis : cours list -> num_cours -> num_cours -> int
 (** [est_prerequis lc nc1 nc2] 
-    retourne 1 si [nc2] est prérequis à [nc1]; -1 si c'est [nc1] qui est 
-    prérequis à [nc2]; 0 sinon.
+    retourne 1 si [nc2] fait partie des préalables de [nc1]; -1 si c'est [nc1] 
+    qui fait partie des préalables de [nc2]; 0 sinon.
     
     {b Soulève exception} {e Failure} si un des 2 cours [nc1] ou [nc2] n'est 
     pas défini dans [lc] (l'exception pourrait avoir été soulevée par une autre 
